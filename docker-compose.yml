@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6060:6060"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=barang_db
+      - JWT_SECRET=your-secret-key-change-in-production
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    volumes:
+      - .:/app
+      - go-mod-cache:/go/pkg/mod
+    command: CompileDaemon -directory=/app -build="go build -o /tmp/app cmd/main.go" -command="/tmp/app"
+    # Atau dengan lebih banyak opsi:
+    # command: CompileDaemon -log-prefix=false -build="go build -o /tmp/app cmd/main.go" -command="/tmp/app"
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=barang_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./internal/infrastructure/database/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+  go-mod-cache:
+
+networks:
+  app-network:
+    driver: bridge
