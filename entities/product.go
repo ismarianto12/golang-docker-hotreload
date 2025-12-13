@@ -14,8 +14,8 @@ type Product struct {
 	Stock       int            `json:"stock" gorm:"not null;default:0"`
 	UserID      uint           `json:"user_id" gorm:"not null;index"`
 	User        User           `json:"user,omitempty" gorm:"foreignKey:UserID;references:ID"`
-	CreatedAt   time.Time      `json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt   time.Time      `json:"updated_at" gorm:"autoUpdateTime"`
+	CreatedAt   time.Time      `json:"created_at" gorm:"autoCreateTime";null`
+	UpdatedAt   time.Time      `json:"updated_at" gorm:"autoUpdateTime";null`
 	DeletedAt   gorm.DeletedAt `json:"-" gorm:"index"`
 }
 

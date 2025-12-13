@@ -1,6 +1,8 @@
 package main
 
 import (
+	"rianRestapp/usecases"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,6 +13,10 @@ type AppConfig struct {
 func main() {
 
 	r := gin.Default()
+	prod := usecases.NewProductUsecase(nil)
+	r.GET("/product/list", prod.GetProductInfo)
+	r.POST("/product/insert", prod.CreateProd)
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -21,6 +27,11 @@ func main() {
 			"status":  "success",
 			"data":    "rian",
 			"message": "perubahan",
+		})
+	})
+	r.GET("/hello", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "hello world",
 		})
 	})
 
