@@ -17,8 +17,26 @@ func NewProductUsecase(barangRepo *repositories.BarangRepo) *ProductUsecase {
 	return &ProductUsecase{barangRepo: barangRepo}
 }
 
+func (u *ProductUsecase) GetIndexData(c *gin.Context) {
+	data, err := u.barangRepo.GetAllData()
+	if err != nil {
+		c.JSON(400, gin.H{
+			"data":    err.Error(),
+			"message": "error pointer payload",
+		})
+
+	} else {
+		c.JSON(400, gin.H{
+			"data":    data,
+			"message": "error pointer payload",
+		})
+
+	}
+
+}
+
 func (u *ProductUsecase) CreateProd(c *gin.Context) {
-	var prod entities.Product
+	var prod *entities.Product
 
 	fmt.Println(" log access {}", prod.Name)
 	if err := c.ShouldBindJSON(&prod); err != nil {
@@ -31,7 +49,7 @@ func (u *ProductUsecase) CreateProd(c *gin.Context) {
 	// log.Default("data" );
 	log.Println("data logging {} ", prod)
 
-	if err := u.barangRepo.CreateData(&prod).Error; err != nil {
+	if err := u.barangRepo.CreateData(prod).Error; err != nil {
 		c.JSON(200, gin.H{
 			"data":    prod,
 			"product": "Sample Product",

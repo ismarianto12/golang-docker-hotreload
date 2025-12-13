@@ -11,10 +11,10 @@ type AppConfig struct {
 }
 
 func main() {
-
 	r := gin.Default()
 	prod := usecases.NewProductUsecase(nil)
 	r.GET("/product/list", prod.GetProductInfo)
+	r.GET("/product/index", prod.GetIndexData)
 	r.POST("/product/insert", prod.CreateProd)
 
 	r.GET("/ping", func(c *gin.Context) {
