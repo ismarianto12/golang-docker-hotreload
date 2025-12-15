@@ -1,7 +1,10 @@
 package routes
 
 import (
+	"log"
+	"rianRestapp/handlers"
 	"rianRestapp/usecases"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,8 +27,28 @@ func IntialRoute(port string) {
 			}
 			category := v1.Group("/category")
 			{
-				category.GET("/list", typeProd.Alldata)
+				category.GET("/list", handlers.CheckTokenHeader(), typeProd.Alldata)
 				category.POST("/insert", typeProd.InserData)
+				category.POST("/show/:id", func(ctx *gin.Context) {
+					id := ctx.Param("id")
+					num, err := strconv.Atoi(id)
+					if err != nil {
+						log.Println("logging id %s", num)
+						ctx.JSON(400, gin.H{
+							"id":   num,
+							"data": "error ivalid paramid",
+						})
+						return
+					}
+
+					log.Println("logging id %s", id)
+
+					ctx.JSON(200, gin.H{
+						"id":   num,
+						"data": "status", "message": "successfully load data",
+					})
+
+				})
 
 				category.GET("/index", func(c *gin.Context) {
 					c.JSON(200, gin.H{
