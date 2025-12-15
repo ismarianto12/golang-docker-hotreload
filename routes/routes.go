@@ -25,6 +25,8 @@ func IntialRoute(port string) {
 			category := v1.Group("/category")
 			{
 				category.GET("/list", typeProd.Alldata)
+				category.POST("/insert", typeProd.InserData)
+
 				category.GET("/index", func(c *gin.Context) {
 					c.JSON(200, gin.H{
 						"data": "status", "message": "successfully load data",

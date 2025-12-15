@@ -36,7 +36,7 @@ func (rp *CategReUsecaseDetail) Alldata(c *gin.Context) {
 
 func (rp *CategReUsecaseDetail) InserData(c *gin.Context) {
 	var typeBarang entities.TypeBarang
-	if err := c.ShouldBindBodyWithJSON(&typeBarang).Error; err != nil {
+	if err := c.ShouldBindBodyWithJSON(&typeBarang); err != nil {
 		log.Print("❌ gagal create DB:", err)
 		c.JSON(200, gin.H{
 			"data": "data",
@@ -44,7 +44,7 @@ func (rp *CategReUsecaseDetail) InserData(c *gin.Context) {
 		return
 
 	}
-	if err := rp.localrepo.InsertData(&typeBarang).Error; err != nil {
+	if err := rp.localrepo.InsertData(&typeBarang); err != nil {
 		log.Print("❌ gagal create DB:", err)
 		c.JSON(200, gin.H{
 			"error":   err,
@@ -57,6 +57,5 @@ func (rp *CategReUsecaseDetail) InserData(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"data": "data",
 	})
-	return
 
 }
