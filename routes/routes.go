@@ -9,6 +9,8 @@ import (
 func IntialRoute(port string) {
 	r := gin.Default()
 	prod := usecases.NewProductUsecase()
+	typeProd := usecases.NewTypeBarangUses()
+
 	api := r.Group("/api")
 	{
 		v1 := api.Group("/v1")
@@ -20,8 +22,17 @@ func IntialRoute(port string) {
 				product.POST("/create", prod.CreateProd)
 				product.POST("/insert", prod.UpdateData)
 			}
-
+			category := v1.Group("/category")
+			{
+				category.GET("/list", typeProd.Alldata)
+				category.GET("/index", func(c *gin.Context) {
+					c.JSON(200, gin.H{
+						"data": "status", "message": "successfully load data",
+					})
+				})
+			}
 		}
+
 	}
 
 	r.GET("/ping", func(c *gin.Context) {
