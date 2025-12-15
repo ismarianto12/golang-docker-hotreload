@@ -35,7 +35,7 @@ func (u *ProductUsecase) GetIndexData(c *gin.Context) {
 }
 
 func (u *ProductUsecase) CreateProd(c *gin.Context) {
-	var prod entities.Product
+	var prod entities.ProductRequest
 
 	fmt.Println(" log access {}", prod.Name)
 	if err := c.ShouldBindJSON(&prod); err != nil {
@@ -46,15 +46,17 @@ func (u *ProductUsecase) CreateProd(c *gin.Context) {
 		return
 	}
 	log.Println("data logging {} ", prod)
-	if err := u.barangRepo.CreateData(&prod).Error; err != nil {
-		c.JSON(200, gin.H{
+	if err := u.barangRepo.CreateData(&prod); err != nil {
+
+		c.JSON(400, gin.H{
 			"data":    prod,
+			"error":   err,
 			"product": "Sample Product",
 		})
 	} else {
-		c.JSON(400, gin.H{
+		c.JSON(200, gin.H{
 			"data":    prod,
-			"product": "Gagal simpan data",
+			"product": "Data berhasil disimpan",
 		})
 
 	}

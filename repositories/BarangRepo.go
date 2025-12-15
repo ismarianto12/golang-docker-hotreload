@@ -61,8 +61,8 @@ func (r *BarangRepo) SaveData(prod *entities.Product) error {
 	return nil
 }
 
-func (r *BarangRepo) CreateData(prod *entities.Product) error {
-	if err := r.db.Save(&prod).Error; err != nil {
+func (r *BarangRepo) CreateData(prod *entities.ProductRequest) error {
+	if err := r.db.Create(prod).Error; err != nil {
 		return err
 	}
 	return nil

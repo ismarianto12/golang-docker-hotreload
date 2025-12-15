@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"rianRestapp/entities"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -14,7 +15,6 @@ func NewDB() (*gorm.DB, error) {
 	// user := os.Getenv("DB_USERNAME")
 	// password := os.Getenv("DB_PASSWORD")
 	// dbname := os.Getenv("DB_NAME")
-
 	host := "postgres"
 	port := "5432"
 	user := "postgres"
@@ -27,6 +27,14 @@ func NewDB() (*gorm.DB, error) {
 	)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err := db.AutoMigrate(&entities.TypeBarang{}); err != nil {
+		log.Printf("pantek error %s", err.Error())
+	}
+
+	if err := db.AutoMigrate(&entities.Product{}); err != nil {
+		log.Print("pantek error lagi bujang %s", err.Error())
+	} // jika ada entity yang kurang tambahkan aja di sini :
+
 	if err != nil {
 		log.Printf("DB_HOST     : %s", host)
 		log.Printf("DB_PORT     : %s", port)
