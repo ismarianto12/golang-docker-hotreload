@@ -33,28 +33,8 @@ func NewBarangRepo() *BarangRepo {
 
 func (r *BarangRepo) GetAllData() ([]entities.Product, error) {
 	var data []entities.Product
-
-	db, err := config.NewDB()
-	if err != nil {
-		log.Fatal("❌ gagal create DB:", err)
-	}
-
-	sqlDB, err := db.DB()
-	if err != nil {
-		log.Fatal("❌ gagal ambil sql.DB:", err)
-	}
-
-	if err := sqlDB.Ping(); err != nil {
-		log.Fatal("❌ DB TIDAK TERKONEKSI:", err)
-	}
-
-	log.Println("✅ DB TERKONEKSI")
-
-	getDb := r.db.Statement.Schema.DBNames
-	log.Printf("info data {}", getDb)
-
-	if err := r.db.Select("name").Scan(&data).Error; err != nil {
-		return data, err
+	if err := r.db.Select("name").Find(&data).Error; err != nil {
+		return nil, err
 	}
 	return data, nil
 }

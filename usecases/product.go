@@ -13,30 +13,29 @@ type ProductUsecase struct {
 	barangRepo *repositories.BarangRepo
 }
 
-func NewProductUsecase(barangRepo *repositories.BarangRepo) *ProductUsecase {
+func NewProductUsecase() *ProductUsecase {
+	barangRepo := repositories.NewBarangRepo()
 	return &ProductUsecase{barangRepo: barangRepo}
 }
 
 func (u *ProductUsecase) GetIndexData(c *gin.Context) {
-	data, err := u.barangRepo.GetAllData()
-	if err != nil {
+	if err, data := u.barangRepo.GetAllData(); err != nil {
 		c.JSON(400, gin.H{
-			"data":    err.Error(),
-			"message": "error pointer payload",
+			"data":    err,
+			"message": "success",
 		})
-
+		return
 	} else {
 		c.JSON(400, gin.H{
 			"data":    data,
-			"message": "error pointer payload",
+			"message": "success",
 		})
-
 	}
 
 }
 
 func (u *ProductUsecase) CreateProd(c *gin.Context) {
-	var prod *entities.Product
+	var prod entities.Product
 
 	fmt.Println(" log access {}", prod.Name)
 	if err := c.ShouldBindJSON(&prod); err != nil {
@@ -46,10 +45,8 @@ func (u *ProductUsecase) CreateProd(c *gin.Context) {
 		})
 		return
 	}
-	// log.Default("data" );
 	log.Println("data logging {} ", prod)
-
-	if err := u.barangRepo.CreateData(prod).Error; err != nil {
+	if err := u.barangRepo.CreateData(&prod).Error; err != nil {
 		c.JSON(200, gin.H{
 			"data":    prod,
 			"product": "Sample Product",
@@ -61,7 +58,23 @@ func (u *ProductUsecase) CreateProd(c *gin.Context) {
 		})
 
 	}
-	return
+}
+
+func (pr *ProductUsecase) UpdateData(c *gin.Context) {
+	var payload entities.Product
+
+	if err := c.ShouldBindBodyWithJSON(&payload); err != nil {
+		c.JSON(400, gin.H{
+			"data":    nil,
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(400, gin.H{
+		"payload": payload.Name,
+		"data":    nil,
+		"message": "succss",
+	})
 
 }
 
