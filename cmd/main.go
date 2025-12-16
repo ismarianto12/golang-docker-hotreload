@@ -1,14 +1,19 @@
 package main
 
-import "rianRestapp/routes"
+import (
+	"os"
+	"rianRestapp/routes"
+)
 
 type AppConfig struct {
-	Port string
+	Port          string
+	ApiVersioning string
 }
 
 func main() {
 	data := &AppConfig{
-		Port: ":6060",
+		Port:          ":6060",
+		ApiVersioning: os.Getenv("APP_VERSIONING"),
 	}
 	routes.IntialRoute(data.Port)
 

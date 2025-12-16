@@ -4,6 +4,7 @@ import (
 	"log"
 	"rianRestapp/entities"
 	"rianRestapp/repositories"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -56,6 +57,38 @@ func (rp *CategReUsecaseDetail) InserData(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{
 		"data": "data",
+	})
+
+}
+func (rp *CategReUsecaseDetail) UpdateData(c *gin.Context) {
+	var typebarang entities.TypeBarang
+	if err := c.ShouldBindBodyWithJSON(&typebarang); err != nil {
+		c.JSON(400, gin.H{
+			"msg":   err,
+			"data ": nil,
+		})
+		return
+	}
+	id := c.Param("id")
+	safeid, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"msg":   err.Error(),
+			"data ": nil,
+		})
+		return
+
+	}
+	if err := rp.localrepo.UpdateByID(safeid); err != nil {
+		c.JSON(200, gin.H{
+			"msg":   err,
+			"data ": "gaga update ata",
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"msg":   "data berhasil di update",
+		"data ": typebarang.Type,
 	})
 
 }

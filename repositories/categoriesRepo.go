@@ -66,3 +66,10 @@ func (gr *CategoryRepo) DeleteId(id int) error {
 	}
 	return nil
 }
+func (gr *CategoryRepo) UpdateByID(id int) error {
+	var category entities.TypeBarang
+	if err := gr.db.Where("id", id).Find(&category).Error; err != nil {
+		return err
+	}
+	return nil
+}

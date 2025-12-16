@@ -6,7 +6,11 @@ import (
 	"rianRestapp/usecases"
 	"strconv"
 
+	_ "rianRestapp/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func IntialRoute(port string) {
@@ -33,7 +37,7 @@ func IntialRoute(port string) {
 					id := ctx.Param("id")
 					num, err := strconv.Atoi(id)
 					if err != nil {
-						log.Println("logging id %s", num)
+						// log.Println("logging id %s", num)
 						ctx.JSON(400, gin.H{
 							"id":   num,
 							"data": "error ivalid paramid",
@@ -59,6 +63,8 @@ func IntialRoute(port string) {
 		}
 
 	}
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
