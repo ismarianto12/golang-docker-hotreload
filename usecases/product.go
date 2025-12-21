@@ -19,9 +19,11 @@ func NewProductUsecase() *ProductUsecase {
 }
 
 func (u *ProductUsecase) GetIndexData(c *gin.Context) {
+	user := c.MustGet("access_token").(entities.User) // {} jika menguankan uud atau acces token
 	if err, data := u.barangRepo.GetAllData(); err != nil {
 		c.JSON(400, gin.H{
 			"data":    err,
+			"user":    user.Email,
 			"message": "success",
 		})
 		return

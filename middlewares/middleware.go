@@ -63,8 +63,6 @@ func (md *ParsingJwt) AuthToken(db *gorm.DB) gin.HandlerFunc {
 
 		claims := token.Claims.(jwt.MapClaims)
 		userID := uint(claims["user_id"].(float64))
-
-		// 🔥 VALIDASI KE TABLE USERS
 		var user entities.User
 		if err := db.First(&user, userID).Error; err != nil {
 			c.JSON(401, gin.H{"message": "User not active"})
