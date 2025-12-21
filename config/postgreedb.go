@@ -30,6 +30,8 @@ func NewDB() (*gorm.DB, error) {
 	if err := db.AutoMigrate(&entities.TypeBarang{}); err != nil {
 		log.Printf("pantek error %s", err.Error())
 	}
+	if err := db.AutoMigrate(&entities.Suplier{}); err != nil {
+	}
 
 	if err := db.AutoMigrate(&entities.Product{}); err != nil {
 		log.Print("pantek error lagi bujang %s", err.Error())

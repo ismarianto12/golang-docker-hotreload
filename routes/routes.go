@@ -17,6 +17,7 @@ func IntialRoute(port string) {
 	r := gin.Default()
 	prod := usecases.NewProductUsecase()
 	typeProd := usecases.NewTypeBarangUses()
+	suplieruscs := usecases.NewSuplierUsecase()
 
 	api := r.Group("/api")
 	{
@@ -28,6 +29,15 @@ func IntialRoute(port string) {
 				product.GET("/list", prod.GetIndexData)
 				product.POST("/create", prod.CreateProd)
 				product.POST("/insert", prod.UpdateData)
+			}
+			suplier := v1.Group("/suplier")
+			{
+				suplier.GET("/index", suplieruscs.IndexData)
+				suplier.POST("/create", suplieruscs.Create)
+				suplier.POST("/update/:id", suplieruscs.UpdateSuplier)
+				suplier.GET("/show/:id", suplieruscs.ShowById)
+				// suplier.POST("/delete/:id", suplieruscs.UpdateSuplier)
+
 			}
 			category := v1.Group("/category")
 			{

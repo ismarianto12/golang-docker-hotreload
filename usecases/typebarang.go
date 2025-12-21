@@ -92,3 +92,7 @@ func (rp *CategReUsecaseDetail) UpdateData(c *gin.Context) {
 	})
 
 }
+
+func (rp *CategReUsecaseDetail) Delet(c *gin.Context) {
+
+}

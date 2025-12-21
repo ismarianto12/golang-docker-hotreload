@@ -3,5 +3,9 @@
     "info": {
         "contact": {}
     },
-    "paths": {}
+    "paths": {
+        "/api/v1/product": {
+            
+        }
+    }
 }
