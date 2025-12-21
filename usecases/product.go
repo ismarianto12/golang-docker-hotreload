@@ -79,29 +79,3 @@ func (pr *ProductUsecase) UpdateData(c *gin.Context) {
 	})
 
 }
-
-func (u *ProductUsecase) GetProductInfo(c *gin.Context) {
-	var prod = []entities.Product{{
-		ID:   1,
-		Name: "Sample Product",
-	},
-		{
-			ID:   1,
-			Name: "Sample Product",
-		}, {
-			ID:   1,
-			Name: "Sample Product",
-		}, {
-			ID:   1,
-			Name: "Sample Product",
-		}, {
-			ID:   1,
-			Name: "Sample Product",
-		},
-	}
-	c.JSON(200, gin.H{
-		"data":    prod,
-		"product": "Sample Product",
-	})
-
-}

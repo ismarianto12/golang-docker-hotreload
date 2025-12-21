@@ -25,7 +25,7 @@ func IntialRoute(port string) {
 		{
 			product := v1.Group("/product")
 			{
-				product.GET("/index", prod.GetProductInfo)
+				// product.GET("/index", prod.GetProductInfo)
 				product.GET("/list", prod.GetIndexData)
 				product.POST("/create", prod.CreateProd)
 				product.POST("/insert", prod.UpdateData)
@@ -35,8 +35,10 @@ func IntialRoute(port string) {
 				suplier.GET("/index", suplieruscs.IndexData)
 				suplier.POST("/create", suplieruscs.Create)
 				suplier.POST("/update/:id", suplieruscs.UpdateSuplier)
+				suplier.POST("/delete/:id", suplieruscs.Delete)
 				suplier.GET("/show/:id", suplieruscs.ShowById)
-				// suplier.POST("/delete/:id", suplieruscs.UpdateSuplier)
+
+				suplier.POST("/uploadfile", suplieruscs.UpdateDataImage)
 
 			}
 			category := v1.Group("/category")
@@ -54,9 +56,7 @@ func IntialRoute(port string) {
 						})
 						return
 					}
-
 					log.Println("logging id %s", id)
-
 					ctx.JSON(200, gin.H{
 						"id":   num,
 						"data": "status", "message": "successfully load data",
@@ -64,9 +64,11 @@ func IntialRoute(port string) {
 
 				})
 
-				category.GET("/index", func(c *gin.Context) {
-					c.JSON(200, gin.H{
-						"data": "status", "message": "successfully load data",
+				r.NoRoute(func(c *gin.Context) {
+					c.JSON(404, gin.H{
+						"status":  404,
+						"message": "Route not found",
+						"path":    c.Request.URL.Path,
 					})
 				})
 			}

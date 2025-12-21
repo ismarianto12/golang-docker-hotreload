@@ -3,6 +3,7 @@ package usecases
 import (
 	"rianRestapp/config"
 	"rianRestapp/entities"
+	"rianRestapp/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,34 @@ func NewSuplierUsecase() *SuplierUsecase {
 	}
 }
 
+func (r *SuplierUsecase) UpdateDataImage(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+	}
+	allowedTypes := map[string]bool{
+		"image/jpeg": true,
+		"image/png":  true,
+	}
+	contentType := file.Header.Get("Content-Type")
+	if !allowedTypes[contentType] {
+		c.JSON(400, gin.H{
+			"message": "only jpeg and png images are allowed",
+		})
+		return
+	}
+
+	dest := "./uploads/" + file.Filename
+	if err := c.SaveUploadedFile(file, dest); err != nil {
+		c.JSON(400, gin.H{
+			"Error": err,
+			"sss":   "ss",
+		})
+
+	}
+	utils.BuildResponse(nil, 200, "file upload success fully", c)
+
+}
+
 func (r *SuplierUsecase) IndexData(c *gin.Context) {
 
 	var suplier []entities.Suplier
@@ -31,12 +60,8 @@ func (r *SuplierUsecase) IndexData(c *gin.Context) {
 			"sss":   "ss",
 		})
 	}
+	utils.BuildResponse(suplier, 200, "success load data", c)
 
-	c.JSON(200, gin.H{
-		"data": suplier,
-		"sss":  "ss",
-	})
-	return
 }
 
 func (db *SuplierUsecase) Create(c *gin.Context) {
@@ -56,9 +81,7 @@ func (db *SuplierUsecase) Create(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(200, gin.H{
-		"messages": "data  berasil di simpna",
-	})
+	utils.BuildResponse(nil, 200, "data berhasil disimpan", c)
 
 }
 
@@ -67,22 +90,20 @@ func (rp *SuplierUsecase) UpdateSuplier(c *gin.Context) {
 	filrest, _ := strconv.Atoi(id)
 	var suplier entities.Suplier
 	if err := rp.db.Where("id", filrest).Save(&suplier).Error; err != nil {
-		c.JSON(200, gin.H{
-			"messages": "data  berasil di simpna",
-		})
+		utils.BuildResponse(nil, 400, "gagal simpan data "+err.Error(), c)
 
 		return
 	}
-	c.JSON(200, gin.H{
-		"messages": "data  berasil di simpna",
-	})
+	utils.BuildResponse(nil, 200, "data berhasil disimpan", c)
 	return
 
 }
 func (dt *SuplierUsecase) Delete(c *gin.Context) {
 	id := c.Param("id")
+	var data entities.Suplier
+
 	paramid, _ := strconv.Atoi(id)
-	if err := dt.db.Delete("id", paramid).Error; err != nil {
+	if err := dt.db.Where("id", paramid).Delete(data).Error; err != nil {
 		c.JSON(200, gin.H{
 			"messages": err.Error(),
 		})
