@@ -88,7 +88,11 @@ func (repo *StockMovement) DeleteData(c *gin.Context) {
 }
 
 func (repo *StockMovement) CallApi(c *gin.Context) {
+
 	resp, err := http.Get("https://www.mncsekuritas.id/backendweb/singleslide")
+	if err != nil {
+		fmt.Printf("%s error koneksi ke endpoint \n", err.Error())
+	}
 	resp.Header.Set("Authorization", "sss")
 	if err != nil {
 		fmt.Print("log data call err")
