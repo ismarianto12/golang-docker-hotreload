@@ -28,7 +28,7 @@ func NewDB() (*gorm.DB, error) {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err := db.AutoMigrate(&entities.TypeBarang{}); err != nil {
-		log.Printf("pantek error %s", err.Error())
+		// log.Printf("pantek error %s", err.Error())
 	}
 	if err := db.AutoMigrate(&entities.Suplier{}); err != nil {
 	}
@@ -36,7 +36,10 @@ func NewDB() (*gorm.DB, error) {
 	if err := db.AutoMigrate(&entities.Product{}); err != nil {
 		log.Print("pantek error lagi bujang %s", err.Error())
 	} // jika ada entity yang kurang tambahkan aja di sini :
+	if err := db.AutoMigrate(&entities.StockMovement{}); err != nil {
+		log.Print("stock movemente create table %s", err.Error())
 
+	}
 	if err != nil {
 		log.Printf("DB_HOST     : %s", host)
 		log.Printf("DB_PORT     : %s", port)
