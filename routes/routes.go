@@ -45,6 +45,7 @@ func IntialRoute(port string) {
 			{
 				stockmovementroute.GET("/index", stockmovement.IndeXalldata)
 				stockmovementroute.POST("/insert", stockmovement.CreatedData)
+				stockmovementroute.POST("/callapi", stockmovement.CallApi)
 
 			}
 
