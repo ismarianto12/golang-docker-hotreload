@@ -1,8 +1,10 @@
 package usecases
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -102,6 +104,7 @@ func (repo *StockMovement) CallApi(c *gin.Context) {
 	defer resp.Body.Close()
 
 	var resbody = string(body)
+
 	var marshaljson = json.Unmarshal([]byte(resbody), &converdata)
 	if marshaljson != nil {
 		utils.BuildResponse(marshaljson.Error(), 400, "gagal parsing data", c)
@@ -111,7 +114,40 @@ func (repo *StockMovement) CallApi(c *gin.Context) {
 
 }
 
+func (db *StockMovement) TestPostData(c *gin.Context) {
+	var payloaddata JsonPayload
+	jsonmars, err := json.Marshal(payloaddata)
+	if err != nil {
+		println("error parsing json {}", err)
+	}
+	bodybuffer := bytes.NewBuffer(jsonmars)
+
+	var url string = "https://www.mncsekuritas.id/backendweb//marketreview"
+	response, err := http.Post(url, "Application/json", bodybuffer)
+	if err != nil {
+		log.Fatal("response {}", err.Error())
+	}
+	defer response.Body.Close()
+
+	biyteBody, err := io.ReadAll(response.Body)
+	log.Printf("body defer %s %d", biyteBody)
+
+	if err != nil {
+		log.Fatal("response {}", err.Error())
+	}
+
+	json.Unmarshal([]byte(biyteBody), &biyteBody)
+
+	utils.BuildResponse(biyteBody, 200, "success get request", c)
+}
+
 type Convertdata struct {
 	Title    string `json:"title"`
 	Headline string `json:"headline"`
+}
+
+type JsonPayload struct {
+	Data   string `json:"data"`
+	Nama   string `json:"nama"`
+	Alamat string `json:"alamat"`
 }

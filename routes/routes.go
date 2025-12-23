@@ -47,6 +47,8 @@ func IntialRoute(port string) {
 				stockmovementroute.POST("/insert", stockmovement.CreatedData)
 				stockmovementroute.POST("/callapi", stockmovement.CallApi)
 
+				stockmovementroute.POST("/testdaa", stockmovement.TestPostData)
+
 			}
 
 			category := v1.Group("/category")
