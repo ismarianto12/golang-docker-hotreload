@@ -35,7 +35,6 @@ func CheckTokenHeader() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		// token := strings.Split(authheader, "")
 		log.Print("detil %s", param)
 		c.Next()
 	}

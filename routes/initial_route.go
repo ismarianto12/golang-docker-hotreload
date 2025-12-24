@@ -7,6 +7,7 @@ type Usecases struct {
 	TypeBarang    *usecases.CategReUsecaseDetail
 	StockMovement *usecases.StockMovement
 	Suplier       *usecases.SuplierUsecase
+	UserUseCase   *usecases.UserUsecase
 }
 
 func NewUsecases() *Usecases {
@@ -15,5 +16,6 @@ func NewUsecases() *Usecases {
 		TypeBarang:    usecases.NewTypeBarangUses(),
 		StockMovement: usecases.NewStockMovement(),
 		Suplier:       usecases.NewSuplierUsecase(),
+		UserUseCase:   usecases.NewUserusecase(),
 	}
 }

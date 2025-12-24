@@ -34,6 +34,10 @@ func IntialRoute(port string) {
 				suplier.GET("/show/:id", uc.Suplier.ShowById)
 				suplier.POST("/uploadfile", uc.Suplier.UpdateDataImage)
 			}
+			userroute := v1.Group("/users")
+			{
+				userroute.GET("/index", uc.UserUseCase.IndexData)
+			}
 
 			stockmovement := v1.Group("/stockmovement")
 			{

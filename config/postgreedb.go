@@ -40,6 +40,8 @@ func NewDB() (*gorm.DB, error) {
 		log.Print("stock movemente create table %s", err.Error())
 
 	}
+	if err := db.AutoMigrate(&entities.User{}); err != nil {
+	}
 	if err != nil {
 		log.Printf("DB_HOST     : %s", host)
 		log.Printf("DB_PORT     : %s", port)
