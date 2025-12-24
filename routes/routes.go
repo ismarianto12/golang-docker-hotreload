@@ -2,9 +2,9 @@ package routes
 
 import (
 	"log"
-	"rianRestapp/handlers"
-	"rianRestapp/usecases"
 	"strconv"
+
+	"rianRestapp/handlers"
 
 	_ "rianRestapp/docs"
 
@@ -15,84 +15,76 @@ import (
 
 func IntialRoute(port string) {
 	r := gin.Default()
-	prod := usecases.NewProductUsecase()
-	typeProd := usecases.NewTypeBarangUses()
-	stockmovement := usecases.NewStockMovement()
-
-	suplieruscs := usecases.NewSuplierUsecase()
-
+	uc := NewUsecases()
 	api := r.Group("/api")
 	{
 		v1 := api.Group("/v1")
 		{
 			product := v1.Group("/product")
 			{
-				product.GET("/list", prod.GetIndexData)
-				product.POST("/create", prod.CreateProd)
-				product.POST("/insert", prod.UpdateData)
+				product.GET("/list", uc.Product.GetIndexData)
+				product.POST("/create", uc.Product.CreateProd)
+				product.POST("/insert", uc.Product.UpdateData)
 			}
+
 			suplier := v1.Group("/suplier")
 			{
-				suplier.GET("/index", suplieruscs.IndexData)
-				suplier.POST("/create", suplieruscs.Create)
-				suplier.POST("/update/:id", suplieruscs.UpdateSuplier)
-				suplier.POST("/delete/:id", suplieruscs.Delete)
-				suplier.GET("/show/:id", suplieruscs.ShowById)
-				suplier.POST("/uploadfile", suplieruscs.UpdateDataImage)
+				suplier.GET("/index", uc.Suplier.IndexData)
+				suplier.POST("/create", uc.Suplier.Create)
+				suplier.POST("/update/:id", uc.Suplier.UpdateSuplier)
+				suplier.POST("/delete/:id", uc.Suplier.Delete)
+				suplier.GET("/show/:id", uc.Suplier.ShowById)
+				suplier.POST("/uploadfile", uc.Suplier.UpdateDataImage)
 			}
 
-			stockmovementroute := v1.Group("/stockmovement")
+			stockmovement := v1.Group("/stockmovement")
 			{
-				stockmovementroute.GET("/index", stockmovement.IndeXalldata)
-				stockmovementroute.POST("/insert", stockmovement.CreatedData)
-				stockmovementroute.POST("/callapi", stockmovement.CallApi)
-
-				stockmovementroute.POST("/testdaa", stockmovement.TestPostData)
-
+				stockmovement.GET("/index", uc.StockMovement.IndeXalldata)
+				stockmovement.POST("/insert", uc.StockMovement.CreatedData)
+				stockmovement.POST("/callapi", uc.StockMovement.CallApi)
+				stockmovement.POST("/testdaa", uc.StockMovement.TestPostData)
 			}
 
 			category := v1.Group("/category")
 			{
-				category.GET("/list", handlers.CheckTokenHeader(), typeProd.Alldata)
-				category.POST("/insert", typeProd.InserData)
+				category.GET("/list", handlers.CheckTokenHeader(), uc.TypeBarang.Alldata)
+				category.POST("/insert", uc.TypeBarang.InserData)
 				category.POST("/show/:id", func(ctx *gin.Context) {
 					id := ctx.Param("id")
 					num, err := strconv.Atoi(id)
 					if err != nil {
-						// log.Println("logging id %s", num)
 						ctx.JSON(400, gin.H{
 							"id":   num,
-							"data": "error ivalid paramid",
+							"data": "error invalid param id",
 						})
 						return
 					}
-					log.Println("logging id %s", id)
+
+					log.Printf("logging id %d", num)
 					ctx.JSON(200, gin.H{
-						"id":   num,
-						"data": "status", "message": "successfully load data",
-					})
-
-				})
-
-				r.NoRoute(func(c *gin.Context) {
-					c.JSON(404, gin.H{
-						"status":  404,
-						"message": "Route not found",
-						"path":    c.Request.URL.Path,
+						"id":      num,
+						"status":  "success",
+						"message": "successfully load data",
 					})
 				})
 			}
 		}
-
 	}
+
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(404, gin.H{
+			"status":  404,
+			"message": "Route not found",
+			"path":    c.Request.URL.Path,
+		})
+	})
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+		c.JSON(200, gin.H{"message": "pong"})
 	})
+
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  "success",
@@ -100,17 +92,10 @@ func IntialRoute(port string) {
 			"message": "perubahan",
 		})
 	})
+
 	r.GET("/hello", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "hello world",
-		})
+		c.JSON(200, gin.H{"message": "hello world"})
 	})
 
-	r.Group("/api/v1", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "API v1",
-		})
-	})
 	r.Run(port)
-
 }
