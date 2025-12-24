@@ -2,11 +2,9 @@ package routes
 
 import (
 	"log"
-	"strconv"
-
-	"rianRestapp/handlers"
-
 	_ "rianRestapp/docs"
+	"rianRestapp/handlers"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
