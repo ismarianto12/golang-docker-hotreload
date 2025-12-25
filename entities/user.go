@@ -11,7 +11,7 @@ type User struct {
 	ID        uint      `json:"id" gorm:"primaryKey;autoIncrement"`
 	Name      string    `json:"name" gorm:"type:varchar(100);not null"`
 	Email     string    `json:"email" gorm:"type:varchar(100);uniqueIndex;not null"`
-	Password  string    `json:"-" gorm:"type:text;not null"`
+	Password  string    `json:"password" gorm:"type:text;not null"`
 	Role      string    `json:"role" gorm:"type:varchar(20);default:'user'"`
 	Products  []Product `json:"products,omitempty" gorm:"foreignKey:UserID"`
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`

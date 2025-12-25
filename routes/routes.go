@@ -37,6 +37,11 @@ func IntialRoute(port string) {
 			userroute := v1.Group("/users")
 			{
 				userroute.GET("/index", uc.UserUseCase.IndexData)
+				userroute.POST("/insert", uc.UserUseCase.Create)
+				userroute.GET("/show/:id", uc.UserUseCase.Show)
+				userroute.DELETE("/delete/:id", uc.UserUseCase.Delete)
+				userroute.PUT("/update/:id", uc.UserUseCase.Update)
+
 			}
 
 			stockmovement := v1.Group("/stockmovement")
